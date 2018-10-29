@@ -38,7 +38,7 @@ public class ClassMapper {
             IJavaClassIndex javaClassIndex,
             IJavaClassDependencyIndex javaClassDependencyIndex) {
 
-        System.out.println("processing: " + artifactPath);
+        System.out.println(String.join(" ", new String[] {"processing:",artifactPath}));
         IArtifact artifact = null;
 
         GAV gav = ArtifactInspector.getArtifactGAV(artifactPath, new Version("unknown"));
@@ -64,10 +64,10 @@ public class ClassMapper {
                     try {
                         indexJavaInternals(artifact, artifactIndex, javaClassIndex, javaClassDependencyIndex, zipInputStream);
                     } catch (IOException ioe) {
-                        System.out.println("error indexing @indexJavaInternals function: " + ioe.getMessage());
+                        System.out.println(Sting.join(" ", new String[] {"error indexing @indexJavaInternals function:", ioe.getMessage() }));
                     }
                 }
-                System.out.println("indexed artifact with GAV: " + artifact.getGAV().getStringValue() + "with classifier: " + artifact.getClassifier() + " and hash: " + artifact.getHash());
+                System.out.println(String.join(" ", new String[] {"indexed artifact with GAV:", artifact.getGAV().getStringValue(), "with classifier:", artifact.getClassifier(), "and hash:", artifact.getHash()}));
             }
         }
 
@@ -87,7 +87,7 @@ public class ClassMapper {
         try {
             zipEntry = zipInputStream.getNextEntry();
         } catch (IOException e) {
-            System.out.println("IOException while reading next entry in ZipInputStream: " + e.getMessage());
+            System.out.println(String.join(" ", new String[] { "IOException while reading next entry in ZipInputStream:", e.getMessage() }));
             throw e;
         }
 
@@ -97,7 +97,7 @@ public class ClassMapper {
                 ClassIndexing(zipEntry, artifact, javaClassIndex, javaClassDependencyIndex, zipInputStream);
 
             } else if (zipEntry.getName().toLowerCase().endsWith(JAR_FILE_EXTENSION) || zipEntry.getName().toLowerCase().endsWith(WAR_FILE_EXTENSION)) {
-                indexedArtifactType = JAR_FILE_EXTENSION + "or" + WAR_FILE_EXTENSION;
+                indexedArtifactType = String.join("", new String [] { JAR_FILE_EXTENSION, "or", WAR_FILE_EXTENSION});
                 try {
                     indexArchiveArtifact(
                             artifact.getArtifactPath() + "!" + zipEntry.getName(),
@@ -107,7 +107,7 @@ public class ClassMapper {
                             javaClassIndex,
                             javaClassDependencyIndex);
                 } catch (Exception e) {
-                    System.out.println("IOException while indexing the artifact " + e.getMessage());
+                    System.out.println(String.join(" ", new String[] {"IOException while indexing the artifact", e.getMessage()));
                     throw e;
                 }
             }
@@ -115,7 +115,7 @@ public class ClassMapper {
             try {
                 zipEntry = zipInputStream.getNextEntry();
             } catch (IOException e) {
-                System.out.println("IOException while getting next entry of ZIP-Stream -> " + zipEntry + " @path " + artifact.getArtifactPath() + ". Reason: " + e.getMessage());
+                System.out.println(String.join(" ", new String[] {"IOException while getting next entry of ZIP-Stream ->", zipEntry, "@path", artifact.getArtifactPath(), ". Reason:", e.getMessage() }));
                 throw e;
             }
         }

@@ -9,16 +9,18 @@ public class Main {
     public static void main(String[] args) {
         try {
             String directory = args[0];
-            if(directory.charAt(0) == '~'){
-                directory = args[0].substring(1);
-            }
-            File inputDirectory = new File(directory);
-            if (inputDirectory != null && inputDirectory.exists()) {
+            File inputDirectory = new File(directory.charAt(0) == '~' ? directory.substring(1) : directory);
+	    if (inputDirectory != null && inputDirectory.isDirectory()) {
                 Indexer.runIndexer(inputDirectory);
             } else {
                 System.out.println("The directory given was not valid");
             }
-        }catch (Exception e) {
+        }
+	catch (SecurityException se)
+	{
+		System.out.println("Security exception thrown by Manager.");
+	}
+	catch (Exception e) {
             e.printStackTrace();
         }
     }

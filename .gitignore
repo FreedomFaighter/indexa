@@ -1,4 +1,4 @@
-
+**/gradle/
 # Android built artifacts
 *.apk
 *.ap_
